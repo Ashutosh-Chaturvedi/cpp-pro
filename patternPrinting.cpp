@@ -124,6 +124,18 @@ void NumPlus() {
 }
 void NumCross() {
   cout << endl << "NUMBER CROSS" << endl;
+
+  int n,d;
+  cout << "Enter n:";
+  cin >> n;
+  cout << "Enter the number you want to display: ";
+  cin >> d;
+  for(int i = 1; i <= n; i++) {
+    for(int j = 1; j <= n; j++) {
+        if(i == j || i + j == n + 1) cout << d;
+        else cout << "  ";
+    } cout << endl;
+  }
   int ret;
   cout << "Wanna repeat?(choose 1): ";
   cin >> ret;
@@ -134,6 +146,22 @@ void NumCross() {
 }
 void NumHollowRec() {
   cout << endl << "NUMBER HOLLOW RECTANGLE" << endl;
+  int n,m;
+  cout << "Enter rows:";
+  cin>> n;
+  cout << "Enter columns:";
+  cin>> m;
+ 
+  for (int i=1; i<=n; i++){
+    for (int j=1; j<=m; j++){
+      if (i==1 || i==n || j==1 || j==m )
+        cout << 1 << " " ;
+   
+      else cout << "  ";
+      
+    }
+    cout <<endl;
+  }
   int ret;
   cout << "Wanna repeat?(choose 1): ";
   cin >> ret;
@@ -144,6 +172,28 @@ void NumHollowRec() {
 }
 void NumPyramid() {
   cout << endl << "NUMBER PYRAMID" << endl;
+
+  int n,m,d;
+  cout << "Enter the height of Pyramid: ";
+  cin >> n;
+  cout << "Enter the width of Pyramid: ";
+  cin >> m;
+  cout << "Enter the number you want to display: ";
+  cin >> d;
+
+  for (int i=1; i<=n; i++){
+    for (int j=n-1; j>=i; j--){
+      cout << "  ";
+    }
+    for (int j=1; j<=i; j++){
+      cout << d << " ";
+    }
+    for (int j=2; j<=i; j++){
+      cout << d << " ";
+    }
+     cout <<endl;
+  }
+
   int ret;
   cout << "Wanna repeat?(choose 1): ";
   cin >> ret;
@@ -154,6 +204,37 @@ void NumPyramid() {
 }
 void DiamondNum() {
   cout << endl << "NUMBER DIAMOND" << endl;
+
+  int n;
+  cout << "Enter the size of diamond: ";
+  cin >> n;
+ 
+  for (int i=1; i<=n; i++){
+    for (int j=n-1; j>=i; j--){
+      cout << "  ";
+    }
+    for (int j=1; j<=i; j++){
+      cout << 1<< " ";
+    }
+    for (int j=2; j<=i; j++){
+      cout << 1 << " ";
+    }
+    cout <<endl;
+  }
+
+  for (int i=1; i<=n; i++){
+    for (int j=1; j<=i; j++){
+      cout << "  ";
+    }
+    for (int j=n-1; j>=i; j--){
+      cout << 1 << " ";
+    }
+    for (int j=n-2; j>=i; j--){
+      cout << 1 << " ";
+    }
+    cout <<endl;
+  }
+
   int ret;
   cout << "Wanna repeat?(choose 1): ";
   cin >> ret;
@@ -164,6 +245,18 @@ void DiamondNum() {
 }
 void Floyd() {
   cout << endl << "FLOYS NUMBER SERIES" << endl;
+  int n;
+  cout << "Enter n:";
+  cin >> n;
+   int a = 1;
+  for (int i = 1; i <= n; i++) {
+    for (int j = 1; j <= i; j++) {
+      cout << a << " ";
+      a++;
+    }
+    cout << endl;
+  }
+
   int ret;
   cout << "Wanna repeat?(choose 1): ";
   cin >> ret;
@@ -174,6 +267,23 @@ void Floyd() {
 }
 void Palindrome() {
   cout << endl << "PALINDROME SERIES" << endl;
+
+  int n;
+  cout<<"Enter n: ";
+  cin>>n;
+  for(int i=1; i<=n; i++){
+    for(int j=n-1; j>=i; j--){
+      cout<<"  ";
+    }
+    for(int j=i;j>=1;j--){
+      cout<<j<<" ";
+    }
+    for(int j=2;j<=i;j++){
+      cout<<j<<" ";
+    }
+    cout<<endl;
+  }
+
   int ret;
   cout << "Wanna repeat?(choose 1): ";
   cin >> ret;
@@ -182,8 +292,32 @@ void Palindrome() {
   else
     return;
 }
+int fac(int a){
+  int f=1;
+  for(int k=1; k<=a; k++){
+    f = f*k;
+  }
+  return f;
+}
+int com(int a, int b){
+  int c;
+  c=a-b;
+  return fac(a)/(fac(b)*fac(c));
+}
 void Pascal() {
   cout << endl << "PASCAL SERIES" << endl;
+  int n;
+  cout<<"Enter the n:";
+  cin>>n;
+  for(int i=0; i<=n;i++){
+    for (int e=n-1; e>=i; e-- ){
+      cout << "  ";
+    }
+    for(int j=0; j<=i; j++){
+      cout << com(i,j) << "   ";
+    }
+    cout<<endl;
+  }
   int ret;
   cout << "Wanna repeat?(choose 1): ";
   cin >> ret;
@@ -577,13 +711,10 @@ void star() {
     star();
 }
 
-void alpha() {}
-
 void pattern() {
   int n;
   cout << "1. Star(symbol) Pattern " << endl;
   cout << "2. Numeric Pattern " << endl;
-  cout << "3. Alphabetic Pattern " << endl;
   cout << "0. To Exit " << endl << endl;
   cout << "Choose the type of pattern you want to print: ";
   cin >> n;
@@ -591,12 +722,8 @@ void pattern() {
     star();
   else if (n == 2)
     numeric();
-  else if (n == 3)
-    alpha();
   else if (n == 0)
     return;
-  // else
-    // pattern();
   pattern();
 }
 
