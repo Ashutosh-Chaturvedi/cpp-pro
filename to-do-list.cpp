@@ -2,7 +2,6 @@
 #include<vector>
 #include<string>
 #include<limits>
-#include<windows.h>
 
 void print(std::vector<std::string> &list);
 
@@ -37,8 +36,6 @@ void enter(std::vector<std::string> &list) {
         std::cin.clear(); // clear the error flag
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // discard invalid input
     }
-    // std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // clear the newline left in the buffer
-
     if (n == 1) {
         enter(list); // Consider replacing with a loop to avoid recursion
     }
@@ -55,7 +52,7 @@ void print(std::vector<std::string> &list){
 }
 
 void menu(std::vector<std::string> &list){
-    // sleep(5);
+    std::cin.clear(); // clear the error flag
     
     std::cout << "\nChoose from the following Operations: \n" ;
     int n ;
@@ -63,17 +60,25 @@ void menu(std::vector<std::string> &list){
     std::cout << "2. Delete the task \n";
     std::cout << "3. Show the whole list \n";
     std::cout << "Option: ";
+    // std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     std::cin >> n;
     if(n == 1) {
         enter(list);
         menu(list);
     }
-    if(n == 2) {
+    else if(n == 2) {
         del(list);
         menu(list);
     }
-    if(n == 3){
+    else if(n == 3){
         print(list);
+        int x;
+        std::cout << "\nPress 1 & ENTER key to return to main menu: " ;
+        std::cin >> x;
+        menu(list);
+    }
+    else {
+        std::cout << "Enter a valid option: ";
         menu(list);
     }
 
