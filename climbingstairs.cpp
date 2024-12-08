@@ -15,7 +15,7 @@ long long climbStairs(long long n) {
 }
 
 int main(){
-    std::cout << "This program will help to find the number of ways of climb the stairs if a person can climb either 1 or 2 stairs at a time." << std::endl;
+    std::cout << "This program will help to find the number of ways of climb the stairs if a person can climb either 1 or 2 stairs at a time.( Max stairs 80 )" << std::endl;
     int n ;
     std::cout << "Enter the number of stairs: ";
     std::cin >> n;
