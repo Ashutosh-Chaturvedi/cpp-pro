@@ -1,5 +1,7 @@
 # Cpp-Pro
-This contains beginner level projects. 
+
+This contains beginner level projects.
+
 <h1>Projects</h1>
 <h5>1. Calculator</h5>
 <h5>2. Pattern Printing</h5>
