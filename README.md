@@ -7,3 +7,4 @@ This contains beginner level projects.
 <h5>4. Climbing Stairs</h5>
 <h5>5. Guess Number Game</h5>
 <h5>6. Greatest common divisor </h5>
+<h6>7. Tic Tac Toe</h6>
