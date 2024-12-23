@@ -6,17 +6,17 @@
 void orderSummary(std::vector<int> &orders,std::vector<std::string> & menuList, std::vector<int> &price){
     std::cout << "\n\n \tORDER SUMMARY \n";
     std::cout << "Code\tItem\t Quantity \tPrice\n";
-    // sort(orders.begin(), orders.end());
-    // std::vector<int> quantity = orders;
-    // quantity.push_back(orders[0]);
+    sort(orders.begin(), orders.end());
+    std::vector<int> quantity = orders;
+    quantity.push_back(orders[0]);
 
-    // for(int i = 1; i < orders.size(); i++){
-    //     int count = 1;
-    //     if(orders[i] == orders[i - 1]){
-    //         count++;
-    //         continue;
-    //     }
-    // }
+    for(int i = 1; i < orders.size(); i++){
+        int count = 1;
+        if(orders[i] == orders[i - 1]){
+            count++;
+            continue;
+        }
+    }
 
     for(int i = 0; i < orders.size(); i++){
         int index = orders[i];
@@ -39,7 +39,7 @@ void order(int b, std::vector<std::string> & menuList, std::vector<int> &price, 
         std::cout << "Invalid Option \n Try again\n";
     }
     order(b,menuList, price, orders);
-    // orderSummary(orders, menuList, price);
+    orderSummary(orders, menuList, price);
 }
 
 void menu(std::vector<std::string> & menuList, std::vector<int> &price) {
