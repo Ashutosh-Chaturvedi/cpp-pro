@@ -58,8 +58,13 @@ void menu(std::vector<std::string> & menuList, std::vector<int> &price) {
 int main(){
     std::cout << "WELCOME \n";
     
+    //Using vector of string to assign menu items
     std::vector<std::string> items = {"Pizza" , "Burger", "Fries", "Momos", "Salad"};
+
+    //Using vector of int to assign prices
     std::vector<int> prices = {120, 80, 40, 60, 100};
+    
+    //Menu fuction call
     menu(items, prices);
     return 0;
 
