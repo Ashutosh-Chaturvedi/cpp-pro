@@ -3,43 +3,44 @@
 #include<string>
 #include<algorithm>
 
-void orderSummary(std::vector<int> &orders,std::vector<std::string> & menuList, std::vector<int> &price){
+void orderSummary(std::vector<int> &orders,std::vector<std::string> & menuList, std::vector<int> &price, std::vector<int>& cost, std::vector<int>& quantity){
     std::cout << "\n\n \tORDER SUMMARY \n";
-    std::cout << "Code\tItem\t Quantity \tPrice\n";
-    sort(orders.begin(), orders.end());
-    std::vector<int> quantity = orders;
-    quantity.push_back(orders[0]);
+    std::cout << "Code\tItem\t Quantity \tRate\t Cost\n";
 
-    for(int i = 1; i < orders.size(); i++){
-        int count = 1;
-        if(orders[i] == orders[i - 1]){
-            count++;
-            continue;
-        }
-    }
+    int totalQuantity = 0;
+    int totalCost = 0;
 
     for(int i = 0; i < orders.size(); i++){
         int index = orders[i];
-        std::cout << " "<< index + 1 << "     " << menuList[index] << "\t\t" << "1 \t" << price[index] << '\n';
+        totalCost = totalCost + (price[index] * quantity[i]);
+        totalQuantity = totalQuantity + quantity[i];
+        std::cout << " "<< index + 1 << "     " << menuList[index] << "\t\t" << quantity[i] << "\t" << price[index] << "\t " << quantity[i] * price[index] << '\n';
     }
 
+    std::cout << "\nTotal\t\t\t" << totalQuantity << "\t\t" << totalCost << '\n';
+    std::cout << std::endl;
 }
 
-void order(int b, std::vector<std::string> & menuList, std::vector<int> &price, std::vector<int> &orders )
+void order(int b, std::vector<std::string> & menuList, std::vector<int> &price, std::vector<int> &orders, std::vector<int>& cost, std::vector<int>& quantity)
 {
     if(b == 0) return;
     int n;
-    std::cout << "Enter the code for what you want to order: ";
+    std::cout << "\nEnter the code for what you want to order: ";
     std::cin >> n;
+
+    //Bug: This will not work if the user enters a code that is not in the menu list
+    int quan;
+    std::cout << "Enter quantity of " << menuList[n-1] << " you want to order: ";
+    std::cin >> quan;
     if(n > 0 && n <= price.size()) {
-        std::cout << "You have ordered " << menuList[n-1] << " for " << price[n-1] << '\n';
+        std::cout << "You have ordered " << quan << " " << menuList[n-1] << " for " << price[n-1] <<" each "<< '\n';
         orders.push_back(n-1);
+        quantity.push_back(quan);
         b--;
     } else {
         std::cout << "Invalid Option \n Try again\n";
     }
-    order(b,menuList, price, orders);
-    orderSummary(orders, menuList, price);
+    order(b,menuList, price, orders, cost, quantity);
 }
 
 void menu(std::vector<std::string> & menuList, std::vector<int> &price) {
@@ -48,11 +49,13 @@ void menu(std::vector<std::string> & menuList, std::vector<int> &price) {
         std::cout << " " << i+1 << ".\t" << menuList[i] << " \t  " << price[i] << '\n';
     } 
     int n;
-    std::cout << "Enter the number of the dish you want to order: ";
+    std::cout << "\nEnter the number of different dishes you want to order: ";
     std::cin >> n;
     std::vector<int> orders;
-    order(n , menuList, price, orders);
-    orderSummary(orders, menuList, price);
+    std::vector<int> cost;
+    std::vector<int> quantity;
+    order(n , menuList, price, orders, cost, quantity);
+    orderSummary(orders, menuList, price, cost, quantity);
 
 }
 int main(){
