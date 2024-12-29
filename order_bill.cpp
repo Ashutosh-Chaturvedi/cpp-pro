@@ -14,10 +14,10 @@ void orderSummary(std::vector<int> &orders,std::vector<std::string> & menuList, 
         int index = orders[i];
         totalCost = totalCost + (price[index] * quantity[i]);
         totalQuantity = totalQuantity + quantity[i];
-        std::cout << " "<< index + 1 << "     " << menuList[index] << "\t\t" << quantity[i] << "\t" << price[index] << "\t " << quantity[i] * price[index] << '\n';
+        std::cout << " "<< index + 1 << "     " << menuList[index] << "\t\t" << quantity[i] << "\t$" << price[index] << "\t$" << quantity[i] * price[index] << '\n';
     }
 
-    std::cout << "\nTotal\t\t\t" << totalQuantity << "\t\t" << totalCost << '\n';
+    std::cout << "\nTotal\t\t\t" << totalQuantity << "\t\t$" << totalCost << '\n';
     std::cout << std::endl;
 }
 
@@ -27,13 +27,17 @@ void order(int b, std::vector<std::string> & menuList, std::vector<int> &price, 
     int n;
     std::cout << "\nEnter the code for what you want to order: ";
     std::cin >> n;
+    if(n > menuList.size()){
+        std::cout << "Invalid code. Please enter a valid code.\n";
+        order(b, menuList, price, orders, cost, quantity);
+        return;
+    }
 
-    //Bug: This will not work if the user enters a code that is not in the menu list
     int quan;
     std::cout << "Enter quantity of " << menuList[n-1] << " you want to order: ";
     std::cin >> quan;
     if(n > 0 && n <= price.size()) {
-        std::cout << "You have ordered " << quan << " " << menuList[n-1] << " for " << price[n-1] <<" each "<< '\n';
+        std::cout << "You have ordered " << quan << " " << menuList[n-1] << " for " << price[n-1] <<"$ each "<< '\n';
         orders.push_back(n-1);
         quantity.push_back(quan);
         b--;
@@ -46,7 +50,7 @@ void order(int b, std::vector<std::string> & menuList, std::vector<int> &price, 
 void menu(std::vector<std::string> & menuList, std::vector<int> &price) {
     std::cout << "Code\t Item \t Price \n";
     for(int i = 0; i < price.size(); i++){
-        std::cout << " " << i+1 << ".\t" << menuList[i] << " \t  " << price[i] << '\n';
+        std::cout << " " << i+1 << ".\t" << menuList[i] << " \t $" << price[i] << '\n';
     } 
     int n;
     std::cout << "\nEnter the number of different dishes you want to order: ";
