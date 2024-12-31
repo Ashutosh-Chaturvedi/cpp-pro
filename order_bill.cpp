@@ -4,6 +4,7 @@
 #include<algorithm>
 
 void orderSummary(std::vector<int> &orders,std::vector<std::string> & menuList, std::vector<int> &price, std::vector<int>& cost, std::vector<int>& quantity){
+
     std::cout << "\n\n \tORDER SUMMARY \n";
     std::cout << "Code\tItem\t Quantity \tRate\t Cost\n";
 
@@ -19,6 +20,7 @@ void orderSummary(std::vector<int> &orders,std::vector<std::string> & menuList, 
 
     std::cout << "\nTotal\t\t\t" << totalQuantity << "\t\t$" << totalCost << '\n';
     std::cout << std::endl;
+
 }
 
 void order(int b, std::vector<std::string> & menuList, std::vector<int> &price, std::vector<int> &orders, std::vector<int>& cost, std::vector<int>& quantity)
@@ -48,6 +50,7 @@ void order(int b, std::vector<std::string> & menuList, std::vector<int> &price, 
 }
 
 void menu(std::vector<std::string> & menuList, std::vector<int> &price) {
+
     std::cout << "Code\t Item \t Price \n";
     for(int i = 0; i < price.size(); i++){
         std::cout << " " << i+1 << ".\t" << menuList[i] << " \t $" << price[i] << '\n';
@@ -63,15 +66,13 @@ void menu(std::vector<std::string> & menuList, std::vector<int> &price) {
 
 }
 int main(){
-    std::cout << "WELCOME \n";
     
-    //Using vector of string to assign menu items
+    std::cout << "\n \tWELCOME \n\n";
+
     std::vector<std::string> items = {"Pizza" , "Burger", "Fries", "Momos", "Salad"};
 
-    //Using vector of int to assign prices
     std::vector<int> prices = {120, 80, 40, 60, 100};
     
-    //Menu fuction call
     menu(items, prices);
     return 0;
 
