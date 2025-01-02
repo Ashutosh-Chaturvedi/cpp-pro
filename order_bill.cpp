@@ -5,7 +5,7 @@
 
 using _string = std::vector<std::string>;
 using _int = std::vector<int>;
-auto& cout = std::cout;
+auto& cout = std::cout; 
 auto& cin = std::cin;
 auto& endline = std::cout << std::endl;
 
