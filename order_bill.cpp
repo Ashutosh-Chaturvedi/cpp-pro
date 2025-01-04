@@ -5,6 +5,12 @@
 
 using _string = std::vector<std::string>;
 using _int = std::vector<int>;
+using _double = std::vector<double>;
+using _bool = std::vector<bool>;
+using V_string = std::vector<std::vector<std::string>>;
+using V_int = std::vector<std::vector<int>>;
+using V_double = std::vector<std::vector<double>>;
+
 auto& cout = std::cout; 
 auto& cin = std::cin;
 auto& endline = std::cout << std::endl;
