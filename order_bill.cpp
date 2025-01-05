@@ -78,14 +78,9 @@ void menu(_string & menuList, _int &price) {
 
 }
 int main(){
-    
     cout << "\n \tWELCOME \n\n";
-
     _string items = {"Pizza" , "Burger", "Fries", "Momos", "Salad"};
-
     _int prices = {120, 80, 40, 60, 100};
-    
     menu(items, prices);
     return 0;
-
 }
