@@ -70,6 +70,7 @@ void order(int b, _string & menuList, _int &price, _int &orders, _int & cost, _i
 
 void menu(_string & menuList, _int &price) {
 
+    endline;
     cout << "Code\t Item \t Price \n";
     for(int i = 0; i < price.size(); i++){
         cout << " " << i+1 << ".\t" << menuList[i] << " \t $" << price[i] << '\n';
@@ -82,6 +83,14 @@ void menu(_string & menuList, _int &price) {
     _int quantity;
     order(n , menuList, price, orders, cost, quantity);
     orderSummary(orders, menuList, price, cost, quantity);
+    cout << "\n\nWant to order again?\n";
+    cout << "1. Yes\n";
+    cout << "2. No\n";
+    int choice;
+    cin >> choice;
+    if(choice == 1) {
+        menu(menuList, price);
+    }
 
 }
 int main(){
