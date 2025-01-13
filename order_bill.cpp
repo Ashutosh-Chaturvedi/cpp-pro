@@ -1,7 +1,9 @@
+
 #include<iostream>
 #include<vector>
 #include<string>
 #include<algorithm>
+
 
 //using typedef to increase readability 
 typedef std::vector<int> _int;
@@ -22,9 +24,16 @@ auto& cout = std::cout;
 auto& cin = std::cin;
 auto& endline = std::cout << std::endl;
 
-void orderSummary(_int & orders,_string & menuList, _int & price, _int & cost, _int & quantity){
+void menu(_string & menuList, _int &price, std::string name);
+void order(int b, _string & menuList, _int &price, _int &orders, _int & cost, _int & quantity, std::string name);
 
-    cout << "\n\n \tORDER SUMMARY \n";
+void orderSummary(_int & orders,_string & menuList, _int & price, _int & cost, _int & quantity, std::string name){
+
+    cout << "______________________________________________\n\n";
+    cout << "CUSTOMER'S NAME: " << name << "\t"; 
+    cout << "ORDER ID- " << rand() << std::endl;
+
+    cout << "\n \tORDER SUMMARY \n";
     cout << "Code\tItem\t Quantity \tRate\t Cost\n";
 
     int totalQuantity = 0;
@@ -38,11 +47,20 @@ void orderSummary(_int & orders,_string & menuList, _int & price, _int & cost, _
     }
 
     cout << "\nTotal\t\t\t" << totalQuantity << "\t\t$" << totalCost << '\n';
+    cout << "______________________________________________\n";
+
+    int n;
+    cout << "\nIf you want to add more items press 1.";
+    cin >> n;
+    if(n == 1){
+        order(1, menuList, price, orders, cost, quantity, name);
+        orderSummary(orders, menuList, price, cost, quantity, name);
+    }
     endline;
 
 }
 
-void order(int b, _string & menuList, _int &price, _int &orders, _int & cost, _int & quantity)
+void order(int b, _string & menuList, _int &price, _int &orders, _int & cost, _int & quantity, std::string name)
 {
     if(b == 0) return;
     int n;
@@ -50,7 +68,7 @@ void order(int b, _string & menuList, _int &price, _int &orders, _int & cost, _i
     cin >> n;
     if(n > menuList.size()){
         cout << "Invalid code. Please enter a valid code.\n";
-        order(b, menuList, price, orders, cost, quantity);
+        order(b, menuList, price, orders, cost, quantity, name);
         return;
     }
 
@@ -65,10 +83,10 @@ void order(int b, _string & menuList, _int &price, _int &orders, _int & cost, _i
     } else {
         cout << "Invalid Option \n Try again\n";
     }
-    order(b,menuList, price, orders, cost, quantity);
+    order(b,menuList, price, orders, cost, quantity, name);
 }
 
-void menu(_string & menuList, _int &price) {
+void menu(_string & menuList, _int &price, std::string name) {
 
     endline;
     cout << "Code\t Item \t Price \n";
@@ -81,15 +99,15 @@ void menu(_string & menuList, _int &price) {
     _int orders;
     _int cost;
     _int quantity;
-    order(n , menuList, price, orders, cost, quantity);
-    orderSummary(orders, menuList, price, cost, quantity);
+    order(n , menuList, price, orders, cost, quantity, name);
+    orderSummary(orders, menuList, price, cost, quantity, name);
     cout << "\n\nWant to order again?\n";
     cout << "1. Yes\n";
     cout << "2. No\n";
     int choice;
     cin >> choice;
     if(choice == 1) {
-        menu(menuList, price);
+        menu(menuList, price, name);
     }
 
 }
@@ -97,6 +115,15 @@ int main(){
     cout << "\n \tWELCOME \n\n";
     _string items = {"Pizza" , "Burger", "Fries", "Momos", "Salad"};
     _int prices = {120, 80, 40, 60, 100};
-    menu(items, prices);
+    std::string first_name;
+    std::string last_name;
+    cout << "Enter the first name ";
+    cin >> first_name;
+    cout << "Enter the last name ";
+    cin >> last_name;
+
+    std::string name = first_name + " " + last_name;
+    
+    menu(items, prices, name);
     return 0;
 }
