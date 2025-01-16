@@ -1,15 +1,11 @@
-
 #include<iostream>
 #include<vector>
 #include<string>
 #include<algorithm>
 
-
-//using typedef to increase readability 
 typedef std::vector<int> _int;
 typedef std::vector<std::string> _string;
 
-//Using 'Using aliasis" to do the same thing as done above.
 using _string = std::vector<std::string>;
 using _int = std::vector<int>;
 using _double = std::vector<double>;
@@ -18,8 +14,6 @@ using V_string = std::vector<std::vector<std::string>>;
 using V_int = std::vector<std::vector<int>>;
 using V_double = std::vector<std::vector<double>>;
 
-//Since cout and cin are not data types, so we can't use the above methods.
-//Using reference
 auto& cout = std::cout; 
 auto& cin = std::cin;
 auto& endline = std::cout << std::endl;
