@@ -18,10 +18,10 @@ auto& cout = std::cout;
 auto& cin = std::cin;
 auto& endline = std::cout << std::endl;
 
-void menu(_string & menuList, _int &price, std::string name);
-void order(int b, _string & menuList, _int &price, _int &orders, _int & cost, _int & quantity, std::string name);
+void menu(_string & menuList, _double &price, std::string name);
+void order(int b, _string & menuList, _double &price, _int &orders, _int & cost, _int & quantity, std::string name);
 
-void orderSummary(_int & orders,_string & menuList, _int & price, _int & cost, _int & quantity, std::string name){
+void orderSummary(_int & orders,_string & menuList, _double & price, _int & cost, _int & quantity, std::string name){
 
     cout << "______________________________________________\n\n";
     cout << "CUSTOMER'S NAME: " << name << "\t"; 
@@ -31,7 +31,7 @@ void orderSummary(_int & orders,_string & menuList, _int & price, _int & cost, _
     cout << "Code\tItem\t Quantity \tRate\t Cost\n";
 
     int totalQuantity = 0;
-    int totalCost = 0;
+    double totalCost = 0;
 
     for(int i = 0; i < orders.size(); i++){
         int index = orders[i];
@@ -54,7 +54,7 @@ void orderSummary(_int & orders,_string & menuList, _int & price, _int & cost, _
 
 }
 
-void order(int b, _string & menuList, _int &price, _int &orders, _int & cost, _int & quantity, std::string name)
+void order(int b, _string & menuList, _double &price, _int &orders, _int & cost, _int & quantity, std::string name)
 {
     if(b == 0) return;
     int n;
@@ -80,7 +80,7 @@ void order(int b, _string & menuList, _int &price, _int &orders, _int & cost, _i
     order(b,menuList, price, orders, cost, quantity, name);
 }
 
-void menu(_string & menuList, _int &price, std::string name) {
+void menu(_string & menuList, _double &price, std::string name) {
 
     endline;
     cout << "Code\t Item \t Price \n";
@@ -108,7 +108,7 @@ void menu(_string & menuList, _int &price, std::string name) {
 int main(){
     cout << "\n \tWELCOME \n\n";
     _string items = {"Pizza" , "Burger", "Fries", "Momos", "Salad"};
-    _int prices = {120, 80, 40, 60, 100};
+    _double prices = {1.2, 0.8, 0.4, 0.6, 1};
     std::string first_name;
     std::string last_name;
     cout << "Enter the first name ";
