@@ -83,7 +83,8 @@ void order(int b, _string & menuList, _double &price, _int &orders, _int & cost,
 void menu(_string & menuList, _double &price, std::string name) {
 
     endline;
-    cout << "Code\t Item \t Price \n";
+    
+    cout << "\nCode\t Item \t Price \n";
     for(int i = 0; i < price.size(); i++){
         cout << " " << i+1 << ".\t" << menuList[i] << " \t $" << price[i] << '\n';
     } 
@@ -107,17 +108,16 @@ void menu(_string & menuList, _double &price, std::string name) {
 }
 int main(){
     cout << "\n \tWELCOME \n\n";
-    _string items = {"Pizza" , "Burger", "Fries", "Momos", "Salad"};
-    _double prices = {1.2, 0.8, 0.4, 0.6, 1};
+    _string items = {"Pizza" , "Burger", "Fries", "Momos", "Salad", "Sandwich", "Soda", "Coke", "Fanta", "Sprite"};
+    _double prices = {1.2, 0.8, 0.4, 0.6, 1, 2, 0.5, 0.5, 0.5, 0.5};
     std::string first_name;
     std::string last_name;
-    cout << "Enter the first name ";
+    cout << "FIRST NAME: ";
     cin >> first_name;
-    cout << "Enter the last name ";
+    cout << "LAST NAME: ";
     cin >> last_name;
 
     std::string name = first_name + " " + last_name;
-    
     menu(items, prices, name);
     return 0;
 }
