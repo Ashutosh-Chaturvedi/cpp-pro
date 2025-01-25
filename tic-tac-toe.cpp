@@ -8,13 +8,27 @@ auto& endline = std::cout << std::endl;
 
 void viewgrid(matrix& grid);
 
+bool isAlreadyPresent(matrix& grid, int index){
+    if(index <= 3){
+            if(grid[0][index - 1] == '.') return false;
+    }
+    else if(index <= 6){
+            if(grid[1][index - 4] == '.') return false;
+    } 
+    else {
+            if(grid[2][index - 7] == '.') return false;
+    }
+    return true;
+}
+
 void input(matrix& grid, char option){
 
     int index;
     cout << "Choose the index for " << option << ": ";
     cin >> index;
-
-    if(index >= 0 && index < 10){
+    bool isPresent = isAlreadyPresent(grid, index);
+    // cout << isPresent;
+    if(index > 0 && index < 10 && (isPresent == false)) {
         if(index <= 3){
             grid[0][index - 1] = option;
         }
