@@ -10,7 +10,7 @@ It also include solution to some of the most popular progamming questions(DSA).
 <h5>5. Guess Number Game</h5>
 <h5>6. Greatest common divisor </h5>
 <h5>7. Order Bill</h6>
-
+<h5>8. Tic-Tac-Toe</h5>
 <br>
 <h1>Questions</h1>
 <h5>1. Climbing Stairs</h5>
