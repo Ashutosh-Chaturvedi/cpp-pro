@@ -1,3 +1,24 @@
+/*
+
+    BASIC INSTRUCTION
+    1. Player 1 is 'X' and Player 2 is 'O'.
+    2. Player 1 goes first, then Player 2.
+    3. To make a move, type the number of the square where you want to place.
+    4. If you want to quit, type 'q' or 'quit'.
+    5. If you want to reset the game, type 'r' or 'reset'.
+    6. If you want to see the game history, type 'h' or 'history'.
+    7. If you want to see the game rules, type 'i' or 'info.
+    8. Indexes are as follows:
+        1 | 2 | 3
+        ---------
+        4 | 5 | 6
+        ---------
+        7 | 8 | 9
+    9. The game will automatically switch between players after each move.
+
+*/
+
+
 #include<iostream>
 #include<vector>
 
@@ -79,24 +100,49 @@ void viewgrid(matrix& grid) {
     }
 }
 
-int main(){
-    matrix grid = {{'.','.','.'},{'.','.','.'},{'.','.','.'}};
-    viewgrid(grid);
-    char option;
-    for(int i = 1; i <= 9; i++){    
-        if(i % 2 != 0)
-            option = 'X';
-        else {
-            option = 'O';
-        }
-        input(grid, option);
+void startMenu(){
+    cout << "Welcome to Tic Tac Toe\n";
+    cout << "1. Start Game\n";
+    cout << "2. Info\n";
+    cout << "3. Exit\n";
+    int choice;
+    cout << "Choose an option: ";
+    cin >> choice;
+    if(choice == 1) {
+        matrix grid = {{'.','.','.'},{'.','.','.'},{'.','.','.'}};
         viewgrid(grid);
-        if(i > 4){
-            if(checkWinner(grid,option)){
-                cout << "Player " << option << " wins\n";
-                break;
+        char option;
+        for(int i = 1; i <= 9; i++){    
+            if(i % 2 != 0)
+                option = 'X';
+            else {
+                option = 'O';
+            }
+            input(grid, option);
+            viewgrid(grid);
+            if(i > 4){
+                if(checkWinner(grid,option)){
+                    cout << "Player " << option << " wins\n\n";
+                    break;
+                }
             }
         }
     }
+    else if(choice == 2) {
+        cout << "This is a simple implementation of Tic Tac Toe\n";
+        cout << "BASIC INSTRUCTION\n1. Player 1 is 'X' and Player 2 is 'O'.\n2. Player 1 goes first, then Player 2.\n3. To make a move, type the number of the square where you want to place.\n\n4. Indexes are as follows:\n1 | 2 | 3\n---------\n4 | 5 | 6\n---------\n7 | 8 | 9\n5. The game will automatically switch between players after each move.";
+        cout << "Press any key to continue...\n";
+        cin.get();
+    }
+    else if(choice == 3) {
+        cout << "Exiting...\n";
+        return;
+    }
+    startMenu();
+
+}
+
+int main(){
+    startMenu();
     return 0;
 }
