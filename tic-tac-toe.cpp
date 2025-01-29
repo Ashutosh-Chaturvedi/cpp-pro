@@ -10,7 +10,26 @@ auto& endline = std::cout << std::endl;
 void viewgrid(matrix& grid);
 
 bool checkWinner(matrix& grid, char option){
-    
+
+    // cout << "Passed \n";
+    for(int i = 0; i < 3; i++){
+        if(grid[i][0] == option && grid[i][1] == option && grid[i][2] == option){
+            return true;
+        }
+    }
+    for(int i = 0; i < 3; i++){
+        if(grid[0][i] == option && grid[1][i] == option && grid[2][i] == option){
+            return true;
+        }
+    }
+    if(grid[0][0] == option && grid[1][1] == option && grid[2][2] == option){
+        return true;
+    }
+    if(grid[0][2] == option && grid[1][1] == option && grid[2][0] == option){
+        return true;
+    }
+
+    return false;
 }
 
 bool isAlreadyPresent(matrix& grid, int index){
@@ -64,20 +83,20 @@ int main(){
     matrix grid = {{'.','.','.'},{'.','.','.'},{'.','.','.'}};
     viewgrid(grid);
     char option;
-    for(int i = 1; i <= 9; i++){
-        
+    for(int i = 1; i <= 9; i++){    
         if(i % 2 != 0)
             option = 'X';
         else {
             option = 'O';
         }
         input(grid, option);
+        viewgrid(grid);
         if(i > 4){
             if(checkWinner(grid,option)){
                 cout << "Player " << option << " wins\n";
+                break;
             }
         }
-        viewgrid(grid);
     }
     return 0;
 }
