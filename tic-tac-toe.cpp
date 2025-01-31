@@ -66,11 +66,12 @@ bool isAlreadyPresent(matrix& grid, int index){
     return true;
 }
 
-void input(matrix& grid, char option){
+int input(matrix& grid, char option){
 
     int index;
-    cout << "Choose the index for " << option << ": ";
+    cout << "\nChoose the index for " << option << ": ";
     cin >> index;
+    cout << "\n";
     bool isPresent = isAlreadyPresent(grid, index);
     
     if(index > 0 && index < 10 && (isPresent == false)) {
@@ -85,14 +86,24 @@ void input(matrix& grid, char option){
         }
     } 
     
+    else if(index == -1 || index == 0){
+        return index;
+    }
+
     else {
+        if (cin.fail()) {
+            cin.clear();  
+            cin.ignore(1000, '\n');  
+        }
         cout << "Invalid index\n";
         input(grid, option);
     }
+    return 1;
 }
 
 void viewgrid(matrix& grid) {
     for(int i = 0 ; i < grid.size(); i++){
+        cout << "\t";
         for(int j = 0 ;j < grid.size(); j++){
             cout << grid[i][j] << "  ";
         } 
@@ -100,17 +111,20 @@ void viewgrid(matrix& grid) {
     }
 }
 
-void startMenu(){
-    cout << "Welcome to Tic Tac Toe\n";
-    cout << "1. Start Game\n";
-    cout << "2. Info\n";
-    cout << "3. Exit\n";
+void startMenu(int opt){
     int choice;
-    cout << "Choose an option: ";
-    cin >> choice;
-    if(choice == 1) {
+    int index = {};
+    if(opt == 1){
+        cout << "Welcome to Tic Tac Toe\n";
+        cout << "1. New Game\n";
+        cout << "2. Info\n";
+        cout << "3. Exit\n";
+        cout << "Choose an option: ";
+        cin >> choice;       
+    }
+    if(choice == 1 || opt == 0) {
+        cout << "\nBasic Commands:\nTo exit: -1.\nTo Restart: 0.\n\nIndexes are as follows:\n\n\t1 | 2 | 3\n\t---------\n\t4 | 5 | 6\n\t---------\n\t7 | 8 | 9\n\n";
         matrix grid = {{'.','.','.'},{'.','.','.'},{'.','.','.'}};
-        viewgrid(grid);
         char option;
         for(int i = 1; i <= 9; i++){    
             if(i % 2 != 0)
@@ -118,11 +132,15 @@ void startMenu(){
             else {
                 option = 'O';
             }
-            input(grid, option);
+            index = input(grid, option);
+            if(index == -1) break;
+            if(index == 0){
+                break;
+            }
             viewgrid(grid);
             if(i > 4){
                 if(checkWinner(grid,option)){
-                    cout << "Player " << option << " wins\n\n";
+                    cout << "\nCONGRATULATIONS!!!\nPlayer " << option << " wins!!!\n\n";
                     break;
                 }
             }
@@ -138,11 +156,15 @@ void startMenu(){
         cout << "Exiting...\n";
         return;
     }
-    startMenu();
+    if(index == 0) {
+        startMenu(0);
+    }
+    else 
+        startMenu(1);
 
 }
 
 int main(){
-    startMenu();
+    startMenu(1);
     return 0;
 }
