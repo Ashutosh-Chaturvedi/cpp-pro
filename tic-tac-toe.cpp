@@ -32,7 +32,6 @@ void viewgrid(matrix& grid);
 
 bool checkWinner(matrix& grid, char option){
 
-    // cout << "Passed \n";
     for(int i = 0; i < 3; i++){
         if(grid[i][0] == option && grid[i][1] == option && grid[i][2] == option){
             return true;
@@ -111,9 +110,28 @@ void viewgrid(matrix& grid) {
     }
 }
 
-void startMenu(int opt){
+void viewHistory(std::vector<matrix>& history) {
+    int size = history.size();
+    cout << "\n\nPrevious Games\n";
+    for(int i = 0 ; i < size; i++){
+        cout << "\nGame " << i + 1 << ": ";       
+        if(checkWinner(history[i],'X')){
+            cout << "Player " << " X " << " won!!!\n\n";
+        }
+        else if(checkWinner(history[i],'O')){
+            cout << "Player " << " O " << " won!!!\n\n";
+        }
+        else {
+            cout << "Game ended in a draw\n\n";   
+        }
+        viewgrid(history[i]);
+    }
+    cout << "\n";
+}
+
+void startMenu(int opt , std::vector<matrix>& history){
     int choice;
-    int index = {};
+    int index = 2;
     if(opt == 1){
         cout << "Welcome to Tic Tac Toe\n";
         cout << "1. New Game\n";
@@ -123,9 +141,10 @@ void startMenu(int opt){
         cout << "Choose an option: ";
         cin >> choice;       
     }
+    matrix grid = {{'.','.','.'},{'.','.','.'},{'.','.','.'}};
+
     if(choice == 1 || opt == 0) {
         cout << "\nBasic Commands:\nTo exit: -1.\nTo Restart: 0.\n\nIndexes are as follows:\n\n\t1 | 2 | 3\n\t---------\n\t4 | 5 | 6\n\t---------\n\t7 | 8 | 9\n\n";
-        matrix grid = {{'.','.','.'},{'.','.','.'},{'.','.','.'}};
         char option;
         for(int i = 1; i <= 9; i++){    
             if(i % 2 != 0)
@@ -142,10 +161,13 @@ void startMenu(int opt){
             if(i > 4){
                 if(checkWinner(grid,option)){
                     cout << "\nCONGRATULATIONS!!!\nPlayer " << option << " wins!!!\n\n";
+                    
                     break;
                 }
             }
         }
+        if(index != -1)
+            history.push_back(grid);
     }
     else if(choice == 2) {
         cout << "This is a simple implementation of Tic Tac Toe\n";
@@ -154,21 +176,23 @@ void startMenu(int opt){
         cin.get();
     }
     else if(choice == 3) {
-
+        viewHistory(history);
     }
     else if(choice == 4) {
         cout << "Exiting...\n";
         return;
     }
+
     if(index == 0) {
-        startMenu(0);
+        startMenu(0, history);
     }
     else 
-        startMenu(1);
+        startMenu(1, history);
 
 }
 
 int main(){
-    startMenu(1);
+    std::vector<matrix> history;
+    startMenu(1, history);
     return 0;
 }
