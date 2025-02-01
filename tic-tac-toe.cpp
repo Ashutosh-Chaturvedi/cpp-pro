@@ -30,39 +30,21 @@ auto& endline = std::cout << std::endl;
 
 void viewgrid(matrix& grid);
 
-bool checkWinner(matrix& grid, char option){
-
-    for(int i = 0; i < 3; i++){
-        if(grid[i][0] == option && grid[i][1] == option && grid[i][2] == option){
+bool checkWinner(const matrix& grid, char player) {
+    for (int i = 0; i < 3; i++) {
+        if ((grid[i][0] == player && grid[i][1] == player && grid[i][2] == player) || 
+            (grid[0][i] == player && grid[1][i] == player && grid[2][i] == player)) {
             return true;
         }
     }
-    for(int i = 0; i < 3; i++){
-        if(grid[0][i] == option && grid[1][i] == option && grid[2][i] == option){
-            return true;
-        }
-    }
-    if(grid[0][0] == option && grid[1][1] == option && grid[2][2] == option){
-        return true;
-    }
-    if(grid[0][2] == option && grid[1][1] == option && grid[2][0] == option){
-        return true;
-    }
-
-    return false;
+    return (grid[0][0] == player && grid[1][1] == player && grid[2][2] == player) || 
+           (grid[0][2] == player && grid[1][1] == player && grid[2][0] == player);
 }
 
 bool isAlreadyPresent(matrix& grid, int index){
-    if(index <= 3){
-            if(grid[0][index - 1] == '.') return false;
-    }
-    else if(index <= 6){
-            if(grid[1][index - 4] == '.') return false;
-    } 
-    else {
-            if(grid[2][index - 7] == '.') return false;
-    }
-    return true;
+    int row = (index - 1) / 3;
+    int col = (index - 1) % 3;
+    return grid[row][col] != '.';
 }
 
 int input(matrix& grid, char option){
