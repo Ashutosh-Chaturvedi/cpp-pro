@@ -118,7 +118,8 @@ void startMenu(int opt){
         cout << "Welcome to Tic Tac Toe\n";
         cout << "1. New Game\n";
         cout << "2. Info\n";
-        cout << "3. Exit\n";
+        cout << "3. History\n";
+        cout << "4. Exit\n";
         cout << "Choose an option: ";
         cin >> choice;       
     }
@@ -153,6 +154,9 @@ void startMenu(int opt){
         cin.get();
     }
     else if(choice == 3) {
+
+    }
+    else if(choice == 4) {
         cout << "Exiting...\n";
         return;
     }
