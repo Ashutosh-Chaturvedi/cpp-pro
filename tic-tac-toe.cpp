@@ -108,14 +108,16 @@ void viewHistory(std::vector<matrix>& history) {
         }
         viewgrid(history[i]);
     }
-    cout << "\n";
+    string any;
+    cout << "\nPress any key to continue...: ";
+    cin >> any;
 }
 
 void startMenu(int opt , std::vector<matrix>& history){
     int choice;
     int index = 2;
     if(opt == 1){
-        cout << "Welcome to Tic Tac Toe\n";
+        cout << "\nWelcome to Tic Tac Toe\n";
         cout << "1. New Game\n";
         cout << "2. Info\n";
         cout << "3. History\n";
@@ -152,10 +154,11 @@ void startMenu(int opt , std::vector<matrix>& history){
             history.push_back(grid);
     }
     else if(choice == 2) {
-        cout << "This is a simple implementation of Tic Tac Toe\n";
-        cout << "BASIC INSTRUCTION\n1. Player 1 is 'X' and Player 2 is 'O'.\n2. Player 1 goes first, then Player 2.\n3. To make a move, type the number of the square where you want to place.\n\n4. Indexes are as follows:\n1 | 2 | 3\n---------\n4 | 5 | 6\n---------\n7 | 8 | 9\n5. The game will automatically switch between players after each move.";
-        cout << "Press any key to continue...\n";
-        cin.get();
+        cout << "\n\nThis is a simple implementation of Tic Tac Toe\n";
+        cout << "\nBASIC INSTRUCTION\n1. Player 1 is 'X' and Player 2 is 'O'.\n2. Player 1 goes first, then Player 2.\n3. To make a move, type the number of the square where you want to place.\n\n4. Indexes are as follows:\n1 | 2 | 3\n---------\n4 | 5 | 6\n---------\n7 | 8 | 9\n5. The game will automatically switch between players after each move.";
+        cout << "\nPress any key to continue...";
+        string any;
+        cin >> any;
     }
     else if(choice == 3) {
         viewHistory(history);
