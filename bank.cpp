@@ -1,5 +1,6 @@
 #include<iostream>
 #include<vector>
+#include<string>
 
 class Account {
     std::string name;
@@ -36,20 +37,29 @@ class Account {
 };
 
 void viewAll(std::vector<Account>& accounts) {
-    for(int i = 0; i < accounts.size(); i++){
-        std::cout << "Account Number: " << accounts[i].getAccountNumber() << std::endl;
-        std::cout << "Name: " << accounts[i].getName() << std::endl;
-        std::cout << "Balance: " << accounts[i].viewBalance() << std::endl;
+    std::cout << "\n\tACCOUNTS\n";
+    for(int i = 0; i < accounts.size(); i++){    
+        std::cout << "\n1. Account Number: " << accounts[i].getAccountNumber() << std::endl;
+        std::cout << "   Name: " << accounts[i].getName() << std::endl;
+        std::cout << "   Balance: " << accounts[i].viewBalance() << std::endl;
     }
 }
 
 void addNew(std::vector<Account>& accounts) {
-    
+    std::string name;
+    double balance;
+    std::cout << "Enter the name: ";
+    std::cin.ignore();
+    std::getline(std::cin, name);
+    std::cout << "Enter the balance: ";
+    std::cin >> balance;
+    Account newAccount(name, balance, 32412313);
+    accounts.push_back(newAccount);
 }
 
-void menu(std::vector<Account>& accounts){
+void menu(std::vector<Account>& accounts) {
     using namespace std;
-    cout << "\t\tBANK\n";
+    cout << "\n\tBANK\n";
     cout << "1. Create Account\n";
     cout << "2. Accounts\n";
     cout << "3. Exit\n\n";
