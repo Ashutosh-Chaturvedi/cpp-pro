@@ -63,19 +63,23 @@ void operations(Account & acc) {
     int choice = getValidatedInput<int> ("Choose: ");
 
     switch (choice) {
-        case 1:
+        case 1:{
         double credit = getValidatedInput<double>("Enter the amount to deposit: ");
         acc.deposit(credit);
         break;
-        case 2:
+        }
+        case 2:{
         double debit = getValidatedInput<double>("Enter the amount to withdraw: ");
         acc.withdraw(debit);
         break;
-        case 3:
+        }
+        case 3:{
         std::cout << "Your current balance is: " << acc.viewBalance() << std::endl;
         break;
+        }
         case 4:
         return;
+        
         default:
         std::cout << "Invalid choice. Please choose a valid option." << std::endl;
     }
