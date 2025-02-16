@@ -25,14 +25,16 @@ class Account {
     std::string type;
     long long accountNumber;
     double balance;
+    int pin;
 
     public:
-    Account(std::string n, double b, long long an, int t) {
+    Account(std::string n, double b, long long an, int t, int p) {
         if(t == 0) type = "Saving";
         else if(t == 1) type = "Current";
         name = n;
         balance = b;
         accountNumber = an;
+        pin = p;
     }
 
     void deposit(double amount) {
@@ -56,6 +58,9 @@ class Account {
     long long getAccountNumber() {
         return accountNumber;
     }
+    int getPin() {
+        return pin;
+    }
     std::string getName() {        
         return name;
     }
@@ -65,6 +70,7 @@ class Account {
 };
 
 void operations(Account & acc) {
+
     std::cout << "Choose from the below options:" << std::endl;
     std::cout << "1. Deposit" << std::endl;
     std::cout << "2. Withdraw" << std::endl;
@@ -98,25 +104,41 @@ void operations(Account & acc) {
 
 void viewAll(std::vector<Account>& accounts) {
     std::cout << "\n\tACCOUNTS\n";
-    for(int i = 0; i < accounts.size(); i++){    
-        std::cout << "\n1. Account Number: " << accounts[i].getAccountNumber() << std::endl;
+    
+    for (size_t i = 0; i < accounts.size(); i++) {    
+        std::cout << "\nAccount Number: " << accounts[i].getAccountNumber() << std::endl;
         std::cout << "   Account Type: " << accounts[i].getType() << std::endl;
         std::cout << "   Name: " << accounts[i].getName() << std::endl;
         std::cout << "   Balance: " << accounts[i].viewBalance() << std::endl;
     }
-    std::cout << "\nIf you want to perform any operation on any of these account choose the account number and press enter.(else press 0)\n";
+
+    std::cout << "\nIf you want to perform any operation on any of these accounts, choose the account number and press enter (or press 0 to exit).\n";
     int choice = getValidatedInput<int>("Account Number: ", true);
 
-    if(choice != 0){
-        for(int i = 0; i < accounts.size(); i++){
-            if(accounts[i].getAccountNumber() == choice){
-                operations(accounts[i]);
-                break;
+    if (choice != 0) {
+        for (size_t i = 0; i < accounts.size(); i++) {
+            if (accounts[i].getAccountNumber() == choice) {
+                
+                int attempts = 3;
+                while (attempts--) {
+                    int pass = getValidatedInput<int>("Enter the PIN: ", true);
+                    if (pass == accounts[i].getPin()) { 
+                        std::cout << "Access granted!" << std::endl;
+                        operations(accounts[i]);
+                        return;
+                    } else {
+                        std::cout << "Incorrect PIN! Attempts left: " << attempts << std::endl;
+                    }
+                }
+
+                std::cout << "Too many incorrect attempts! Returning to menu.\n";
+                return;
             }
         }
+        std::cout << "Account not found! Returning to menu.\n";
     }
-
 }
+
 
 void addNew(std::vector<Account>& accounts) {
     
@@ -128,7 +150,8 @@ void addNew(std::vector<Account>& accounts) {
     std::getline(std::cin, name);
     double balance = getValidatedInput<double>("Enter the balance: ",true);
     int type = getValidatedInput<int>("Choose 0 for saving account & 1 for current: ",true);
-    Account newAccount(name, balance, accountNumber, type);
+    int pin = getValidatedInput<int>("Enter the pin: ",true);
+    Account newAccount(name, balance, accountNumber, type, pin);
     accounts.push_back(newAccount);
 }
 
