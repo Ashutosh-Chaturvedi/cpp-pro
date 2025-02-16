@@ -1,5 +1,6 @@
 #include<iostream>
 #include<cmath>
+#include<vector>
 using namespace std;
 
 void cbroot() {
@@ -164,7 +165,7 @@ void mul() {
   int n;
   cout << "How many numbers you want to multiply?";
   cin >> n;
-  int a[n];
+  vector<int> a(n);
   for (int i = 0; i < n; i++) {
     cout << "Enter a number:";
     cin >> a[i];
@@ -200,7 +201,7 @@ void sub() {
   int n;
   cout << "How many numbers you want to sub?";
   cin >> n;
-  int a[n];
+  vector<int> a(n);
   for (int i = 0; i < n; i++) {
     cout << "Enter a number:";
     cin >> a[i];
@@ -241,7 +242,7 @@ void add() {
   int n;
   cout << "How many numbers you want to add?";
   cin >> n;
-  int a[n];
+  vector<int> a(n);
   for (int i = 0; i < n; i++) {
     cout << "Enter a number:";
     cin >> a[i];
