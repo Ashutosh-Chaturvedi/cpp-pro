@@ -1,3 +1,4 @@
+// Required header files for input/output, file operations, and data structures
 #include<fstream> 
 #include<iostream>
 #include<vector>
@@ -5,6 +6,8 @@
 #include<limits>
 #include<sstream>
 
+// Template function to get and validate user input
+// Returns only when valid input is received
 template <typename T>
 T getValidatedInput(const std::string& prompt, bool mustBePositive = false) {
     T value;
@@ -12,6 +15,7 @@ T getValidatedInput(const std::string& prompt, bool mustBePositive = false) {
         std::cout << prompt;
         std::cin >> value;
 
+        // Check for invalid input or negative numbers when positive is required
         if (std::cin.fail() || (mustBePositive && value < 0)) { 
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -22,16 +26,21 @@ T getValidatedInput(const std::string& prompt, bool mustBePositive = false) {
         }
     }
 }
+
+// Account class to manage bank account information and operations
 class Account {
-    std::string name;
-    std::string type;
-    long long accountNumber;
-    double balance;
-    int pin;
+    // Private member variables
+    std::string name;        // Account holder's name
+    std::string type;        // Account type (Saving/Current)
+    long long accountNumber; // Account number
+    double balance;         // Current balance
+    int pin;               // PIN for account access
 
     public:
+    // Default constructor
     Account() = default;
 
+    // Parameterized constructor
     Account(std::string n, double b, long long an, int t, int p) {
         type = (t == 0) ? "Saving" : (t == 1) ? "Current" : "Unknown";
         name = n;
@@ -40,43 +49,37 @@ class Account {
         pin = p;
     }
 
+    // Method to deposit money into account
     void deposit(double amount) {
-        
         balance += amount;
-
     }
+
+    // Method to withdraw money from account
     void withdraw(double amount) {
-        
         if (amount > this->balance) {
             std::cout << "Insufficient funds" << std::endl;
         }
         else {
             balance -= amount;
         }
-        
     }
-    std::string getType() const {
-        return type;
-    }
-    long long getAccountNumber() const {
-        return accountNumber;
-    }
-    int getPin() const {
-        return pin;
-    }
-    std::string getName() const {        
-        return name;
-    }
-    double viewBalance() const {
-        return balance;
-    }
+
+    // Getter methods
+    std::string getType() const { return type; }
+    long long getAccountNumber() const { return accountNumber; }
+    int getPin() const { return pin; }
+    std::string getName() const { return name; }
+    double viewBalance() const { return balance; }
 };
 
+// Function to update the accounts file after any transaction
 void updateFile(std::vector<Account> &accounts) {
-    std::ofstream file("accounts.txt", std::ios::trunc);
+    std::ofstream file("accounts.txt", std::ios::trunc);  // Open file in truncate mode
     if (file.is_open()) {
+        // Write each account's details to file
         for (const auto& acc : accounts) {
-            file << acc.getAccountNumber() << "," << acc.getName() << "," << acc.viewBalance() << "," << acc.getType() << "," << acc.getPin() << std::endl;
+            file << acc.getAccountNumber() << "," << acc.getName() << "," 
+                 << acc.viewBalance() << "," << acc.getType() << "," << acc.getPin() << std::endl;
         }
         file.close();
     } else {
@@ -84,6 +87,7 @@ void updateFile(std::vector<Account> &accounts) {
     }
 }
 
+// Function to handle account operations (deposit, withdraw, balance check)
 void operations(Account& acc, std::vector<Account>& accounts) {
     std::cout << "Choose from the below options:\n";
     std::cout << "1. Deposit\n2. Withdraw\n3. Check Balance\n4. Exit\n";
@@ -112,13 +116,14 @@ void operations(Account& acc, std::vector<Account>& accounts) {
         default:
             std::cout << "Invalid choice. Please choose a valid option.\n";
     }
-    operations(acc, accounts);    
+    operations(acc, accounts);  // Recursive call for continuous operation
 }
 
-
+// Function to view all accounts and perform operations on selected account
 void viewAll(std::vector<Account>& accounts) {
     std::cout << "\n\tACCOUNTS\n";
     
+    // Display all accounts
     for (size_t i = 0; i < accounts.size(); i++) {    
         std::cout << "\nAccount Number: " << accounts[i].getAccountNumber() << std::endl;
         std::cout << "   Account Type: " << accounts[i].getType() << std::endl;
@@ -129,11 +134,12 @@ void viewAll(std::vector<Account>& accounts) {
     std::cout << "\nIf you want to perform any operation on any of these accounts, choose the account number and press enter (or press 0 to exit).\n";
     int choice = getValidatedInput<int>("Account Number: ", true);
 
+    // Search for selected account and verify PIN
     bool found = false;
     for (size_t i = 0; i < accounts.size(); i++) {
         if (accounts[i].getAccountNumber() == choice) {
             found = true;
-            int attempts = 3;
+            int attempts = 3;  // Allow 3 PIN attempts
             while (attempts--) {
                 int pass = getValidatedInput<int>("Enter the PIN: ", true);
                 if (pass == accounts[i].getPin()) { 
@@ -149,54 +155,61 @@ void viewAll(std::vector<Account>& accounts) {
         }
     }
     if (!found) std::cout << "Account not found! Returning to menu.\n";
-
 }
 
-
+// Function to add a new account
 void addNew(std::vector<Account>& accounts) {
-    
+    // Get account details from user
     int accountNumber = getValidatedInput<int>("Enter the account number: ",true);
-
+    
     std::string name;
     std::cout << "Enter the name: ";
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     std::getline(std::cin, name);
+    
     double balance = getValidatedInput<double>("Enter the balance: ",true);
     int type = getValidatedInput<int>("Choose 0 for saving account & 1 for current: ",true);
+    
+    std::string typeStr = (type == 0) ? "Saving" : "Current";
     int pin = getValidatedInput<int>("Enter the pin: ",true);
+    
+    // Create and store new account
     Account newAccount(name, balance, accountNumber, type, pin);
     accounts.push_back(newAccount);
 
-    //Accounts detail in external file
+    // Save account details to file
     std::ofstream file("accounts.txt", std::ios::app);
     if (file.is_open()){
-        file << accountNumber << "," << name << "," << balance << "," << type << "," << pin << "\n";
+        file << accountNumber << "," << name << "," << balance << "," << typeStr << "," << pin << "\n";
         file.close();
     } else {
         std::cout << "Error: Could not save account!" << std::endl;
     }
 }
 
+// Main menu function
 void menu(std::vector<Account>& accounts) {
     using namespace std;
     cout << "\n\tBANK\n";
     cout << "1. Create Account\n";
     cout << "2. Accounts\n";
     cout << "3. Exit\n\n";
+    
     int n = getValidatedInput<int>("Choose from the above options: ", true);
     switch (n) {
         case 1:
-        addNew(accounts);
-        break;
+            addNew(accounts);
+            break;
         case 2:
-        viewAll(accounts);
-        break;
+            viewAll(accounts);
+            break;
         case 3:
-        return;
+            return;
     }
-    menu(accounts);
+    menu(accounts);  // Recursive call for continuous operation
 }
 
+// Function to load existing accounts from file
 void loadAccounts(std::vector<Account>& accounts) {
     std::ifstream file("accounts.txt");
     if (!file.is_open()) {
@@ -205,27 +218,27 @@ void loadAccounts(std::vector<Account>& accounts) {
     }
 
     std::string line;
-    while (std::getline(file, line)) {  
-        std::cout << "Reading line: " << line << std::endl;  // Debugging
-
+    while (std::getline(file, line)) {
         std::stringstream ss(line);
         std::string accountNumberStr, name, balanceStr, typeStr, pinStr;
 
+        // Parse CSV format
         if (!std::getline(ss, accountNumberStr, ',') ||
             !std::getline(ss, name, ',') ||
             !std::getline(ss, balanceStr, ',') ||
             !std::getline(ss, typeStr, ',') ||
             !std::getline(ss, pinStr, ',')) {
             std::cout << "Error: Malformed line detected!" << std::endl;
-            continue;  // Skip this line
+            continue; 
         }
 
         try {
+            // Convert strings to appropriate data types
             long long accountNumber = std::stoll(accountNumberStr);
             double balance = std::stod(balanceStr);
             int pin = std::stoi(pinStr);
 
-            // Convert type string to integer (0 for Saving, 1 for Current)
+            // Determine account type
             int type;
             if (typeStr == "Saving") {
                 type = 0;
@@ -233,7 +246,7 @@ void loadAccounts(std::vector<Account>& accounts) {
                 type = 1;
             } else {
                 std::cout << "Error: Unknown account type '" << typeStr << "'\n";
-                continue; // Skip this invalid entry
+                continue;
             }
 
             accounts.push_back(Account(name, balance, accountNumber, type, pin));
@@ -245,8 +258,9 @@ void loadAccounts(std::vector<Account>& accounts) {
     file.close();
 }
 
+// Main function
 int main() {
-    std::vector<Account> accounts;
-    loadAccounts(accounts);
-    menu(accounts);
+    std::vector<Account> accounts;  // Vector to store all accounts
+    loadAccounts(accounts);         // Load existing accounts from file
+    menu(accounts);                 // Start the program
 }
