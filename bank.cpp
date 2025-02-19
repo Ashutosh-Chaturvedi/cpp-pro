@@ -1,10 +1,13 @@
-// Required header files for input/output, file operations, and data structures
 #include<fstream> 
 #include<iostream>
 #include<vector>
 #include<string>
 #include<limits>
 #include<sstream>
+#include<random>
+#include<chrono>
+#include<ctime>
+#include<iomanip>
 
 // Template function to get and validate user input
 // Returns only when valid input is received
@@ -72,6 +75,10 @@ class Account {
     double viewBalance() const { return balance; }
 };
 
+void TransactionHistory(Account & account) {
+
+}
+
 // Function to update the accounts file after any transaction
 void updateFile(std::vector<Account> &accounts) {
     std::ofstream file("accounts.txt", std::ios::trunc);  // Open file in truncate mode
@@ -89,7 +96,7 @@ void updateFile(std::vector<Account> &accounts) {
 
 // Function to handle account operations (deposit, withdraw, balance check)
 void operations(Account& acc, std::vector<Account>& accounts) {
-    std::cout << "Choose from the below options:\n";
+    std::cout << "\nChoose from the below options:\n";
     std::cout << "1. Deposit\n2. Withdraw\n3. Check Balance\n4. Exit\n";
     
     int choice = getValidatedInput<int>("Choose: ", true);
@@ -131,7 +138,7 @@ void viewAll(std::vector<Account>& accounts) {
         std::cout << "   Balance: " << accounts[i].viewBalance() << std::endl;
     }
 
-    std::cout << "\nIf you want to perform any operation on any of these accounts, choose the account number and press enter (or press 0 to exit).\n";
+    std::cout << "\nEnter an account number to proceed or 0 to exit..\n";
     int choice = getValidatedInput<int>("Account Number: ", true);
 
     // Search for selected account and verify PIN
@@ -160,7 +167,28 @@ void viewAll(std::vector<Account>& accounts) {
 // Function to add a new account
 void addNew(std::vector<Account>& accounts) {
     // Get account details from user
-    int accountNumber = getValidatedInput<int>("Enter the account number: ",true);
+    int accountNumber;
+    // while(true){
+    //     std::random_device rd; 
+    //     std::mt19937 gen(rd()); 
+    //     std::uniform_int_distribution<int> dist(100000, 50); 
+    //     accountNumber = dist(gen);
+    //     bool found = false;
+    //     for (size_t i = 0; i < accounts.size(); i++) {
+    //         if (accounts[i].getAccountNumber() == accountNumber) {
+    //             found = true;
+    //             break;
+    //         }
+    //     }
+    //     if(!found) break;
+    // }    
+
+    int n = accounts.size();
+    if(n == 0){
+        accountNumber = 42058001;
+    } else {
+        accountNumber = accounts[n-1].getAccountNumber() + 1;
+    }
     
     std::string name;
     std::cout << "Enter the name: ";
@@ -177,6 +205,25 @@ void addNew(std::vector<Account>& accounts) {
     Account newAccount(name, balance, accountNumber, type, pin);
     accounts.push_back(newAccount);
 
+    // Get current time as time_point
+    auto now = std::chrono::system_clock::now();    
+    // Convert to time_t for formatting
+    std::time_t now_c = std::chrono::system_clock::to_time_t(now);
+    // Convert to local time
+    std::tm* local_time = std::localtime(&now_c);
+
+    std::cout << "Date: " << std::put_time(local_time, "%d-%m-%Y") << std::endl;
+
+    // Extract and print time separately
+    std::cout << "Time: " << std::put_time(local_time, "%H:%M:%S") << std::endl;
+    std::ofstream his(name + ".txt",std::ios::app);
+    if(his.is_open()){
+        his << "Type : " << typeStr << "\n";
+        his << "Account Number: " << accountNumber << "\n";
+        his << "Date: " << std::put_time(local_time, "%Y-%m-%d")<< std::endl;
+        his << "Time: " << std::put_time(local_time, "%H:%M:%S") << std::endl;
+    }
+
     // Save account details to file
     std::ofstream file("accounts.txt", std::ios::app);
     if (file.is_open()){
@@ -190,23 +237,24 @@ void addNew(std::vector<Account>& accounts) {
 // Main menu function
 void menu(std::vector<Account>& accounts) {
     using namespace std;
-    cout << "\n\tBANK\n";
-    cout << "1. Create Account\n";
-    cout << "2. Accounts\n";
-    cout << "3. Exit\n\n";
-    
-    int n = getValidatedInput<int>("Choose from the above options: ", true);
-    switch (n) {
-        case 1:
-            addNew(accounts);
-            break;
-        case 2:
-            viewAll(accounts);
-            break;
-        case 3:
-            return;
+    while(true){
+        cout << "\n=====BANK=====\n";
+        cout << "1. Create Account\n";
+        cout << "2. Accounts\n";
+        cout << "3. Exit\n\n";
+        
+        int n = getValidatedInput<int>("Choose from the above options: ", true);
+        switch (n) {
+            case 1:
+                addNew(accounts);
+                break;
+            case 2:
+                viewAll(accounts);
+                break;
+            case 3:
+                return;
+        }
     }
-    menu(accounts);  // Recursive call for continuous operation
 }
 
 // Function to load existing accounts from file
