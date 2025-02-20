@@ -1,3 +1,11 @@
+#ifdef _WIN32
+#define CLEAR_SCREEN "cls"  
+#else
+#define CLEAR_SCREEN "clear"
+#endif
+
+#include"color.h"   //This header file include all formatting color codes
+
 #include<fstream> 
 #include<iostream>
 #include<vector>
@@ -8,23 +16,42 @@
 #include<chrono>
 #include<ctime>
 #include<iomanip>
+#include<thread>
+
+void printWithDelay(const std::string& text, const std::string& formats = RESET, int delay = 30) {
+    std::cout << formats; 
+    for (char c : text) {
+        std::cout << c << std::flush;
+        std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+    }
+    std::cout << RESET;
+}
 
 template <typename T>
-T getValidatedInput(const std::string& prompt, bool mustBePositive = false) {
+T getValidatedInput(const std::string& prompt, bool mustBePositive = false, const std::string& color = RESET) {
     T value;
     while (true) {
-        std::cout << prompt;
+        printWithDelay(prompt, color);
         std::cin >> value;
 
         if (std::cin.fail() || (mustBePositive && value < 0)) { 
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Invalid input. Please enter a valid " 
-                      << (mustBePositive ? "positive " : "") << "number." << std::endl;
+            std::cout << "Invalid input. Please enter a valid " << (mustBePositive ? "positive " : "") << "number." << std::endl;
         } else {
             return value;
         }
     }
+}
+
+void progressBar() {
+    std::cout << "Processing: [";
+    for (int i = 0; i < 20; i++) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        std::cout << "#";
+        std::cout.flush(); 
+    }
+    std::cout << "] Done!\n";
 }
 
 std::string Date(){
@@ -103,13 +130,13 @@ void TransactionHistory(Account & account) {
 void record(Account & account, std::string type, double amount) {
     
     std::ofstream file(account.getName() + ".txt", std::ios_base::app);
-    file << type << "," << amount << "," << account.viewBalance() <<"," << Date() << "," << Time() << std::endl;
+    file << type << "ed  " << amount << " \t" << account.viewBalance() <<"\t" << Date() << "  " << Time() << std::endl;
 
 }
 
 void updateFile(std::vector<Account> &accounts) {
     std::ofstream file("accounts.txt", std::ios::trunc);  
-    if (file.is_open()) {
+    if (file.is_open()) { 
         for (const auto& acc : accounts) {
             file << acc.getAccountNumber() << "," << acc.getName() << "," << acc.viewBalance() << "," << acc.getType() << "," << acc.getPin() << std::endl;
         }
@@ -131,6 +158,7 @@ void operations(Account& acc, std::vector<Account>& accounts) {
             acc.deposit(credit);
             updateFile(accounts); 
             record(acc, "Credit" , credit);
+            progressBar();
             std::cout << "Deposit successful!" << std::endl;
             break;
         }
@@ -139,6 +167,7 @@ void operations(Account& acc, std::vector<Account>& accounts) {
             acc.withdraw(debit);
             updateFile(accounts);  
             record(acc, "Debit", debit);
+            progressBar();
             std::cout << "Withdrawal successful!" << std::endl;
             break;
         }
@@ -158,17 +187,21 @@ void operations(Account& acc, std::vector<Account>& accounts) {
 }
 
 void viewAll(std::vector<Account>& accounts) {
-    std::cout << "\n\tACCOUNTS\n";
+    printWithDelay("\n\tACCOUNTS\n",BOLD_RED);
 
     for (size_t i = 0; i < accounts.size(); i++) {    
-        std::cout << "\nAccount Number: " << accounts[i].getAccountNumber() << std::endl;
-        std::cout << "Account Type: " << accounts[i].getType() << std::endl;
-        std::cout << "Name: " << accounts[i].getName() << std::endl;
-        std::cout << "Balance: " << accounts[i].viewBalance() << std::endl;
+        printWithDelay( "\nAccount Number: ", BLUE, 10 );
+        std::cout << accounts[i].getAccountNumber() << std::endl;
+        printWithDelay("Account Type: ",BLUE, 10);
+        std::cout << accounts[i].getType() << std::endl;
+        printWithDelay("Name: ",BLUE, 10);
+        std::cout << accounts[i].getName() << std::endl;
+        printWithDelay("Balance: ",BLUE, 10);
+        std::cout << accounts[i].viewBalance() << std::endl;
     }
 
-    std::cout << "\nEnter an account number to proceed or 0 to exit..\n";
-    int choice = getValidatedInput<int>("Account Number: ", true);
+    printWithDelay("\nEnter an account number to proceed or 0 to exit..\n",ITALIC_YELLOW);
+    int choice = getValidatedInput<int>("Account Number: ", true,ITALIC_YELLOW);
 
     bool found = false;
     for (size_t i = 0; i < accounts.size(); i++) {
@@ -204,7 +237,7 @@ void addNew(std::vector<Account>& accounts) {
     }
     
     std::string name;
-    std::cout << "Enter the name: ";
+    printWithDelay("Enter the name: ");
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     std::getline(std::cin, name);
     
@@ -213,7 +246,7 @@ void addNew(std::vector<Account>& accounts) {
     
     std::string typeStr = (type == 0) ? "Saving" : "Current";
     int pin = getValidatedInput<int>("Enter the pin: ",true);
-    
+    printWithDelay("\nAccount Created Successfully!");
    
     Account newAccount(name, balance, accountNumber, type, pin);
     accounts.push_back(newAccount);
@@ -225,6 +258,7 @@ void addNew(std::vector<Account>& accounts) {
         his << "Date: " << Date() << std::endl;
         his << "Time: " << Time() << std::endl;
         his << "Deposited: " << balance << "\n";
+        his << "\n Type    Amount      Balance     Date    Time\n";
     }
 
     std::ofstream file("accounts.txt", std::ios::app);
@@ -239,12 +273,12 @@ void addNew(std::vector<Account>& accounts) {
 void menu(std::vector<Account>& accounts) {
     using namespace std;
     while(true){
-        cout << "\n=====BANK=====\n";
-        cout << "1. Create Account\n";
-        cout << "2. Accounts\n";
-        cout << "3. Exit\n\n";
+        printWithDelay("\n=====BANK=====\n",BOLD_BLUE) ;
+        printWithDelay("1. Create Account\n",GREEN);
+        printWithDelay("2. Accounts\n",GREEN);
+        printWithDelay("3. Exit\n\n",GREEN);
         
-        int n = getValidatedInput<int>("Choose from the above options: ", true);
+        int n = getValidatedInput<int>("Choose from the above options: ", true,ITALIC_YELLOW);
         switch (n) {
             case 1:
                 addNew(accounts);
@@ -304,6 +338,10 @@ void loadAccounts(std::vector<Account>& accounts) {
 }
 
 int main() {
+    printWithDelay("Loading banking system...\n");
+    printWithDelay("Press Enter to continue.....");
+    std::cin.get();  
+    system(CLEAR_SCREEN);
     std::vector<Account> accounts;  
     loadAccounts(accounts);        
     menu(accounts);                
