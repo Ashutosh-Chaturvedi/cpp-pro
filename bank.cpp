@@ -30,6 +30,23 @@ T getValidatedInput(const std::string& prompt, bool mustBePositive = false) {
     }
 }
 
+std::string Date(){
+    auto now = std::chrono::system_clock::now();    
+    std::time_t now_c = std::chrono::system_clock::to_time_t(now);
+    std::tm* local_time = std::localtime(&now_c);
+    std::ostringstream oss;
+    oss << std::put_time(local_time, "%Y-%m-%d"); 
+    return oss.str();
+}
+
+std::string Time(){
+    auto now = std::chrono::system_clock::now();
+    std::time_t now_c = std::chrono::system_clock::to_time_t(now);
+    std::tm* local_time = std::localtime(&now_c);
+    std::ostringstream oss;
+    oss << std::put_time(local_time, "%H:%M:%S");
+    return oss.str();
+}
 // Account class to manage bank account information and operations
 class Account {
     // Private member variables
@@ -75,7 +92,27 @@ class Account {
     double viewBalance() const { return balance; }
 };
 
+//Function to view Transaction History
 void TransactionHistory(Account & account) {
+
+    std::ifstream file(account.getName() + ".txt");
+    if (file.is_open()) {
+        std::string line;
+        while (std::getline(file, line)) {
+            std::cout << line << std::endl;
+        }
+        file.close();
+    }
+    else {
+        std::cout << "File not found" << std::endl;
+    }
+
+}
+
+void record(Account & account, std::string type, double amount) {
+    
+    std::ofstream file(account.getName() + ".txt", std::ios_base::app);
+    file << type << "," << amount << "," << account.viewBalance() <<"," << Date() << "," << Time() << std::endl;
 
 }
 
@@ -85,8 +122,7 @@ void updateFile(std::vector<Account> &accounts) {
     if (file.is_open()) {
         // Write each account's details to file
         for (const auto& acc : accounts) {
-            file << acc.getAccountNumber() << "," << acc.getName() << "," 
-                 << acc.viewBalance() << "," << acc.getType() << "," << acc.getPin() << std::endl;
+            file << acc.getAccountNumber() << "," << acc.getName() << "," << acc.viewBalance() << "," << acc.getType() << "," << acc.getPin() << std::endl;
         }
         file.close();
     } else {
@@ -97,7 +133,7 @@ void updateFile(std::vector<Account> &accounts) {
 // Function to handle account operations (deposit, withdraw, balance check)
 void operations(Account& acc, std::vector<Account>& accounts) {
     std::cout << "\nChoose from the below options:\n";
-    std::cout << "1. Deposit\n2. Withdraw\n3. Check Balance\n4. Exit\n";
+    std::cout << "1. Deposit\n2. Withdraw\n3. Check Balance\n4. Bank Statement\n0. Exit\n";
     
     int choice = getValidatedInput<int>("Choose: ", true);
 
@@ -106,12 +142,16 @@ void operations(Account& acc, std::vector<Account>& accounts) {
             double credit = getValidatedInput<double>("Enter the amount to deposit: ", true);
             acc.deposit(credit);
             updateFile(accounts); 
+            record(acc, "Credit" , credit);
+            std::cout << "Deposit successful!" << std::endl;
             break;
         }
         case 2: {
             double debit = getValidatedInput<double>("Enter the amount to withdraw: ", true);
             acc.withdraw(debit);
             updateFile(accounts);  
+            record(acc, "Debit", debit);
+            std::cout << "Withdrawal successful!" << std::endl;
             break;
         }
         case 3: {
@@ -119,6 +159,9 @@ void operations(Account& acc, std::vector<Account>& accounts) {
             break;
         }
         case 4:
+            TransactionHistory(acc);
+          
+        case 0:
             return;
         default:
             std::cout << "Invalid choice. Please choose a valid option.\n";
@@ -133,9 +176,9 @@ void viewAll(std::vector<Account>& accounts) {
     // Display all accounts
     for (size_t i = 0; i < accounts.size(); i++) {    
         std::cout << "\nAccount Number: " << accounts[i].getAccountNumber() << std::endl;
-        std::cout << "   Account Type: " << accounts[i].getType() << std::endl;
-        std::cout << "   Name: " << accounts[i].getName() << std::endl;
-        std::cout << "   Balance: " << accounts[i].viewBalance() << std::endl;
+        std::cout << "Account Type: " << accounts[i].getType() << std::endl;
+        std::cout << "Name: " << accounts[i].getName() << std::endl;
+        std::cout << "Balance: " << accounts[i].viewBalance() << std::endl;
     }
 
     std::cout << "\nEnter an account number to proceed or 0 to exit..\n";
@@ -168,20 +211,6 @@ void viewAll(std::vector<Account>& accounts) {
 void addNew(std::vector<Account>& accounts) {
     // Get account details from user
     int accountNumber;
-    // while(true){
-    //     std::random_device rd; 
-    //     std::mt19937 gen(rd()); 
-    //     std::uniform_int_distribution<int> dist(100000, 50); 
-    //     accountNumber = dist(gen);
-    //     bool found = false;
-    //     for (size_t i = 0; i < accounts.size(); i++) {
-    //         if (accounts[i].getAccountNumber() == accountNumber) {
-    //             found = true;
-    //             break;
-    //         }
-    //     }
-    //     if(!found) break;
-    // }    
 
     int n = accounts.size();
     if(n == 0){
@@ -204,24 +233,14 @@ void addNew(std::vector<Account>& accounts) {
     // Create and store new account
     Account newAccount(name, balance, accountNumber, type, pin);
     accounts.push_back(newAccount);
-
-    // Get current time as time_point
-    auto now = std::chrono::system_clock::now();    
-    // Convert to time_t for formatting
-    std::time_t now_c = std::chrono::system_clock::to_time_t(now);
-    // Convert to local time
-    std::tm* local_time = std::localtime(&now_c);
-
-    std::cout << "Date: " << std::put_time(local_time, "%d-%m-%Y") << std::endl;
-
-    // Extract and print time separately
-    std::cout << "Time: " << std::put_time(local_time, "%H:%M:%S") << std::endl;
+  
     std::ofstream his(name + ".txt",std::ios::app);
     if(his.is_open()){
         his << "Type : " << typeStr << "\n";
         his << "Account Number: " << accountNumber << "\n";
-        his << "Date: " << std::put_time(local_time, "%Y-%m-%d")<< std::endl;
-        his << "Time: " << std::put_time(local_time, "%H:%M:%S") << std::endl;
+        his << "Date: " << Date() << std::endl;
+        his << "Time: " << Time() << std::endl;
+        his << "Deposited: " << balance << "\n";
     }
 
     // Save account details to file
