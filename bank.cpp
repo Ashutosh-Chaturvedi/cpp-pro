@@ -1,22 +1,4 @@
-#ifdef _WIN32
-#define CLEAR_SCREEN "cls"  
-#else
-#define CLEAR_SCREEN "clear"
-#endif
-
-#include"color.h"   //This header file include all formatting color codes
-
-#include<fstream> 
-#include<iostream>
-#include<vector>
-#include<string>
-#include<limits>
-#include<sstream>
-#include<random>
-#include<chrono>
-#include<ctime>
-#include<iomanip>
-#include<thread>
+#include"important.h"   //This header file include all the necessary libraries and functions
 
 void printWithDelay(const std::string& text, const std::string& formats = RESET, int delay = 30) {
     std::cout << formats; 
