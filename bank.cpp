@@ -1,4 +1,4 @@
-#include"important.h"   //This header file include all the necessary libraries and functions
+#include"important.h"  
 
 void printWithDelay(const std::string& text, const std::string& formats = RESET, int delay = 30) {
     std::cout << formats; 
@@ -27,13 +27,14 @@ T getValidatedInput(const std::string& prompt, bool mustBePositive = false, cons
 }
 
 void progressBar() {
-    std::cout << "Processing: [";
+    std::cout << "Processing: [" << BLUE;
+    
     for (int i = 0; i < 20; i++) {
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
         std::cout << "#";
         std::cout.flush(); 
     }
-    std::cout << "] Done!\n";
+    std::cout << RESET << "] Done!\n";
 }
 
 std::string Date(){
@@ -129,28 +130,28 @@ void updateFile(std::vector<Account> &accounts) {
 }
 
 void operations(Account& acc, std::vector<Account>& accounts) {
-    std::cout << "\nChoose from the below options:\n";
-    std::cout << "1. Deposit\n2. Withdraw\n3. Check Balance\n4. Bank Statement\n0. Exit\n";
+    std::cout << BOLD_MAGENTA << "\nChoose from the below options:\n" << RESET;
+    std::cout << GREEN << "1. Deposit\n2. Withdraw\n3. Check Balance\n4. Bank Statement\n0. Exit\n" << RESET;
     
-    int choice = getValidatedInput<int>("Choose: ", true);
+    int choice = getValidatedInput<int>("Choose: ", true, ITALIC_YELLOW);
 
     switch (choice) {
         case 1: {
-            double credit = getValidatedInput<double>("Enter the amount to deposit: ", true);
+            double credit = getValidatedInput<double>("Enter the amount to deposit: ", true, ITALIC_YELLOW);
             acc.deposit(credit);
             updateFile(accounts); 
             record(acc, "Credit" , credit);
             progressBar();
-            std::cout << "Deposit successful!" << std::endl;
+            std::cout << BOLD_GREEN << "Deposit successful!" << std::endl << RESET;
             break;
         }
         case 2: {
-            double debit = getValidatedInput<double>("Enter the amount to withdraw: ", true);
+            double debit = getValidatedInput<double>("Enter the amount to withdraw: ", true, ITALIC_YELLOW);
             acc.withdraw(debit);
             updateFile(accounts);  
             record(acc, "Debit", debit);
             progressBar();
-            std::cout << "Withdrawal successful!" << std::endl;
+            std::cout << BOLD_GREEN << "Withdrawal successful!" << std::endl << RESET;
             break;
         }
         case 3: {
@@ -191,20 +192,20 @@ void viewAll(std::vector<Account>& accounts) {
             found = true;
             int attempts = 3;
             while (attempts--) {
-                int pass = getValidatedInput<int>("Enter the PIN: ", true);
+                int pass = getValidatedInput<int>("Enter the PIN: " , true, BOLD_CYAN);
                 if (pass == accounts[i].getPin()) { 
-                    std::cout << "Access granted!\n";
+                    std::cout << BOLD_GREEN << "Access granted!\n" << RESET;
                     operations(accounts[i], accounts);
                     return;
                 } else {
-                    std::cout << "Incorrect PIN! Attempts left: " << attempts << "\n";
+                    std::cout << BOLD_RED << "Incorrect PIN! Attempts left: " << attempts << "\n" << RESET;
                 }
             }
-            std::cout << "Too many incorrect attempts! Returning to menu.\n";
+            std::cout << BOLD_RED << "Too many incorrect attempts! Returning to menu.\n" << RESET;
             return;
         }
     }
-    if (!found) std::cout << "Account not found! Returning to menu.\n";
+    if (!found) std::cout << BOLD_RED << "Account not found! Returning to menu.\n" << RESET;
 }
 
 void addNew(std::vector<Account>& accounts) {
