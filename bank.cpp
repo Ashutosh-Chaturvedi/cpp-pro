@@ -320,10 +320,30 @@ void loadAccounts(std::vector<Account>& accounts) {
     file.close();
 }
 
+bool validation(int & password){
+
+    int attempts = 3;
+    while (attempts--) {
+        int pass = getValidatedInput<int>("Enter the PIN: " , true, BOLD_CYAN);
+        if (pass == password) { 
+            std::cout << BOLD_GREEN << "Access granted!\n" << RESET;
+            return 1;
+        } else {
+            std::cout << BOLD_RED << "Incorrect PIN! Attempts left: " << attempts << "\n" << RESET;
+        }
+    } 
+    std::cout << BOLD_RED << "Too many incorrect attempts! Returning to menu.\n" << RESET;
+    return 0;
+
+}
+
 int main() {
     printWithDelay("Loading banking system...\n");
     printWithDelay("Press Enter to continue.....");
     std::cin.get();  
+    system(CLEAR_SCREEN);
+    int pin = PIN;
+    if(!validation(pin)) return 1;
     system(CLEAR_SCREEN);
     std::vector<Account> accounts;  
     loadAccounts(accounts);        

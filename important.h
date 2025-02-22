@@ -30,6 +30,7 @@
 #define BOLD_MAGENTA "\033[1;35m"
 #define BOLD_CYAN "\033[1;36m"
 #define BOLD_WHITE "\033[1;37m"
+#define PIN 1860
 
 #include<fstream> 
 #include<iostream>
