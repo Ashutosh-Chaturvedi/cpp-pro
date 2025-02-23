@@ -1,4 +1,17 @@
-#include"important.h"  
+#include"color.h"
+#include<fstream> 
+#include<iostream>
+#include<vector>
+#include<string>
+#include<limits>
+#include<sstream>
+#include<random>
+#include<chrono>
+#include<ctime>
+#include<iomanip>
+#include<thread>
+#define PIN 1860
+
 
 void printWithDelay(const std::string& text, const std::string& formats = RESET, int delay = 30) {
     std::cout << formats; 
