@@ -12,7 +12,6 @@
 #include<thread>
 #define PIN 1860
 
-
 void printWithDelay(const std::string& text, const std::string& formats = RESET, int delay = 30) {
     std::cout << formats; 
     for (char c : text) {

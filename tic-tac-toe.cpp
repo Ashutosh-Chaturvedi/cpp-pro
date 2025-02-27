@@ -18,15 +18,26 @@
 
 */
 
-
+#include"color.h"
 #include<iostream>
 #include<vector>
+#include<chrono>
+#include<thread>
 
 using matrix = std::vector<std::vector<char>>;
 using string = std::string;
 auto& cout = std::cout;
 auto& cin = std::cin;
 auto& endline = std::cout << std::endl;
+
+void printWithDelay(const std::string& text, const std::string& formats = RESET, int delay = 30) {
+    std::cout << formats; 
+    for (char c : text) {
+        std::cout << c << std::flush;
+        std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+    }
+    std::cout << RESET;
+}
 
 void viewgrid(matrix& grid);
 
@@ -50,7 +61,9 @@ bool isAlreadyPresent(matrix& grid, int index){
 int input(matrix& grid, char option){
 
     int index;
-    cout << "\nChoose the index for " << option << ": ";
+    std::string x = "";
+    x.push_back(option);
+    printWithDelay("\nChoose the index for " + x + ": ");
     cin >> index;
     cout << "\n";
     bool isPresent = isAlreadyPresent(grid, index);
@@ -117,18 +130,13 @@ void startMenu(int opt , std::vector<matrix>& history){
     int choice;
     int index = 2;
     if(opt == 1){
-        cout << "\nWelcome to Tic Tac Toe\n";
-        cout << "1. New Game\n";
-        cout << "2. Info\n";
-        cout << "3. History\n";
-        cout << "4. Exit\n";
-        cout << "Choose an option: ";
+        printWithDelay("\nWelcome to Tic Tac Toe\n1. New Game\n2. Info\n3. History\n4. Exit\nChoose an option: ",BLUE,10);
         cin >> choice;       
     }
     matrix grid = {{'.','.','.'},{'.','.','.'},{'.','.','.'}};
 
     if(choice == 1 || opt == 0) {
-        cout << "\nBasic Commands:\nTo exit: -1.\nTo Restart: 0.\n\nIndexes are as follows:\n\n\t1 | 2 | 3\n\t---------\n\t4 | 5 | 6\n\t---------\n\t7 | 8 | 9\n\n";
+        printWithDelay("\nBasic Commands:\nTo exit: -1.\nTo Restart: 0.\n\nIndexes are as follows:\n\n\t1 | 2 | 3\n\t---------\n\t4 | 5 | 6\n\t---------\n\t7 | 8 | 9\n\n",GREEN,10);
         char option;
         for(int i = 1; i <= 9; i++){    
             if(i % 2 != 0)
@@ -154,17 +162,16 @@ void startMenu(int opt , std::vector<matrix>& history){
             history.push_back(grid);
     }
     else if(choice == 2) {
-        cout << "\n\nThis is a simple implementation of Tic Tac Toe\n";
-        cout << "\nBASIC INSTRUCTION\n1. Player 1 is 'X' and Player 2 is 'O'.\n2. Player 1 goes first, then Player 2.\n3. To make a move, type the number of the square where you want to place.\n\n4. Indexes are as follows:\n1 | 2 | 3\n---------\n4 | 5 | 6\n---------\n7 | 8 | 9\n5. The game will automatically switch between players after each move.";
-        cout << "\nPress any key to continue...";
-        string any;
-        cin >> any;
+        printWithDelay("\n\nThis is a simple implementation of Tic Tac Toe\n\nBASIC INSTRUCTION\n1. Player 1 is 'X' and Player 2 is 'O'.\n2. Player 1 goes first, then Player 2.\n3. To make a move, type the number of the square where you want to place.\n\n4. Indexes are as follows:\n1 | 2 | 3\n---------\n4 | 5 | 6\n---------\n7 | 8 | 9\n5. The game will automatically switch between players after each move.\nPress any key to continue...",BLUE,10);
+        cin.clear();
+        cin.ignore();
+        std::cin.get();
     }
     else if(choice == 3) {
         viewHistory(history);
     }
     else if(choice == 4) {
-        cout << "Exiting...\n";
+        printWithDelay("Exiting...\n",BOLD_RED);
         return;
     }
 
